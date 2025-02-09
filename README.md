@@ -12,7 +12,6 @@ This repository contains code and resources for detecting brain tumors using the
 - [Usage](#usage)
 - [Acknowledgments](#acknowledgments)
 
----
 
 ## Installation
 
