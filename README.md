@@ -15,7 +15,7 @@ This repository contains code and resources for detecting brain tumors using the
 
 ## Installation
 
-    ```
+
 1. Install the required Python libraries:
     ```bash
     pip install -r requirements.txt
