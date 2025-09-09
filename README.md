@@ -1,7 +1,7 @@
 
 
 # Brain Tumor Detection using YOLOv8
-
+check out my live demo here https://huggingface.co/spaces/vtu23089/braintumorclassification
 This project demonstrates **brain tumor classification and detection** using the **YOLOv8 model**.
 It uses a labeled dataset of brain MRI scans (glioma, meningioma, pituitary tumor, and no tumor) to train and test a detection pipeline.
 
