@@ -1,73 +1,104 @@
-# (updated version)
-
-This repository contains code and resources for detecting brain tumors using the YOLO (You Only Look Once) object detection model. The project leverages the ultralytics YOLO library to train and evaluate a custom model on a brain tumor dataset.
- Demo --- https://vtu23089-braintumorclassification.hf.space/?__theme=system
-## Table of Contents
-- [Installation](#installation)
-- [Dataset](#dataset)
-- [Training](#training)
-- [Inference](#inference)
-- [Results Visualization](#results-visualization)
-- [Requirements](#requirements)
-- [Usage](#usage)
-- [Acknowledgments](#acknowledgments)
 
 
-## Installation
+# Brain Tumor Detection using YOLOv8
+
+This project demonstrates **brain tumor classification and detection** using the **YOLOv8 model**.
+It uses a labeled dataset of brain MRI scans (glioma, meningioma, pituitary tumor, and no tumor) to train and test a detection pipeline.
+
+##  Setup
 
 
-1. Install the required Python libraries:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-
-
-## Training
-To train the YOLO model, ensure you have configured a YAML file with paths to your training and validation data. Example command to train:
+### 1. Mount Google Drive & Extract Dataset
 
 ```python
-from ultralytics import YOLO
-model = YOLO('yolov8n.pt')
-model.train(data='data.yaml', epochs=50, imgsz=640)
+from google.colab import drive
+drive.mount('/content/drive')
+
+import zipfile
+zip_path = '/content/drive/MyDrive/Braintumor classification/archive.zip'
+extract_path = '/content/drive/MyDrive/Braintumor classification'
+with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+    zip_ref.extractall(extract_path)
 ```
 
-## Inference
-To run inference on an image:
-```python
-from ultralytics import YOLO
+### 2. Install Dependencies
 
-trained_model = YOLO('path/to/best.pt')
-results = trained_model('path/to/image.png')
-```
-
-## Results Visualization
-Use Matplotlib to visualize results:
-```python
-import matplotlib.pyplot as plt
-
-image_array = results[0].plot()
-plt.imshow(image_array)
-plt.axis('off')
-plt.show()
-```
-
-## Requirements
-- Python 3.8 or higher
-- Libraries: ultralytics, matplotlib, pillow
-
-Install all dependencies using:
 ```bash
-pip install -r requirements.txt
+pip install ultralytics Augmentor
 ```
 
-## Usage
-1. Train the YOLO model using your dataset.
-2. Perform inference on new images to detect brain tumors.
-3. Visualize and analyze the results.
+##  Dataset
 
+* **Classes:**
 
+  * `glioma` → 0
+  * `meningioma` → 1
+  * `notumor` → 2
+  * `pituitary` → 3
 
-Feel free to contribute to this project by submitting issues or pull requests!"
-}
+Each image has a corresponding YOLO-format `.txt` annotation file with bounding boxes.
 
+##  Data Preprocessing
+
+* Dataset is split into **train** (80%) and **test** (20%) using `custom_train_test_split()`.
+* Visualization of bounding boxes is included to confirm dataset correctness.
+
+##  Training YOLOv8
+
+To train from scratch:
+
+```python
+from ultralytics import YOLO
+
+yolo_btd_model = YOLO("yolov8n.yaml")
+yolo_btd_model.train(
+    data="/content/drive/MyDrive/Braintumor classification/brain_tumor_dataset.yaml",
+    epochs=25
+)
+```
+
+##  Evaluation
+
+After training, the best weights are saved as **`best.pt`**.
+
+Run inference:
+
+```python
+from ultralytics import YOLO
+import matplotlib.pyplot as plt
+import cv2
+
+model = YOLO("/content/drive/MyDrive/Braintumor classification/best.pt")
+
+image_paths = [
+    "/content/.../glioma/Tr-gl_0022.jpg",
+    "/content/.../meningioma/Tr-me_0010.jpg",
+    "/content/.../notumor/Tr-no_0010.jpg",
+    "/content/.../pituitary/Tr-pi_0012.jpg"
+]
+
+results_list = [model(path) for path in image_paths]
+
+for i, results in enumerate(results_list):
+    res_img = results[0].plot()
+    plt.figure(figsize=(6, 6))
+    plt.imshow(cv2.cvtColor(res_img, cv2.COLOR_BGR2RGB))
+    plt.title(f"Result {i+1}")
+    plt.axis("off")
+    plt.show()
+```
+
+##  Output Example
+
+The model overlays bounding boxes and class labels on MRI images:
+
+* Glioma tumor detected
+* Meningioma tumor detected
+* Pituitary tumor detected
+* No tumor case
+
+## 🛠 Requirements
+
+* Python 3.8+
+* Google Colab / Jupyter Notebook
+* Libraries: `ultralytics`, `matplotlib`, `opencv-python`, `sklearn`, `Augmentor`, `PIL`
