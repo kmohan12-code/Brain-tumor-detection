@@ -1,4 +1,4 @@
-# Brain Tumor Detection (updated version)
+# (updated version)
 
 This repository contains code and resources for detecting brain tumors using the YOLO (You Only Look Once) object detection model. The project leverages the ultralytics YOLO library to train and evaluate a custom model on a brain tumor dataset.
 🔗 Brain Tumor Detection Demo --- https://vtu23089-braintumorclassification.hf.space/?__theme=system
