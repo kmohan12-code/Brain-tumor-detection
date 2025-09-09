@@ -14,12 +14,6 @@ It uses a labeled dataset of brain MRI scans (glioma, meningioma, pituitary tumo
 from google.colab import drive
 drive.mount('/content/drive')
 
-import zipfile
-zip_path = '/content/drive/MyDrive/Braintumor classification/archive.zip'
-extract_path = '/content/drive/MyDrive/Braintumor classification'
-with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-    zip_ref.extractall(extract_path)
-```
 
 ### 2. Install Dependencies
 
