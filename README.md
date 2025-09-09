@@ -97,7 +97,7 @@ The model overlays bounding boxes and class labels on MRI images:
 * Pituitary tumor detected
 * No tumor case
 
-## 🛠 Requirements
+##  Requirements
 
 * Python 3.8+
 * Google Colab / Jupyter Notebook
